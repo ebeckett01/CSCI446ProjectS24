@@ -12,15 +12,11 @@ unitsRouter.mergeParams = true;
         Avaliable   Ready To Rent
         On-Repair   Under maintenance/broken Not ready to rent
         Out         Out on a contract 
-        Sold        Sold and no longer part of active inventory unable to re-add
-        Stolen      No longer part of active inventory but could re-added
+        Lost        Lost and no longer part of active inventory unable to re-add
 */
-
 // Create a unit
 
 // Update a unit status
-
-// Update a unit number
 
 // Update a unit price
 

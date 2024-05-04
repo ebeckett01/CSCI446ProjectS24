@@ -8,6 +8,8 @@ import unitsRouter from "./unitsRouter";
 *   Unit Number                 ie which specific unit is rented
 *   Time Created                ie when contract was made
 *   Time Closed                 ie when contract was closed
+*   Customer First and Last Name
+*   Customer Phone Number
 *   Contract Status
 *       Active:         unit still rented
 *       Closed:         unit was returned
