@@ -16,12 +16,88 @@ import unitsRouter from "./unitsRouter";
 *       Collections:    unit was stolen
 */
 
+const ContractsRouter = Router()
+
 // Create a contract
+ContractsRouter.post("/contracts", async (req, res) => {
+    const db = req.app("db");
+
+    try {
+        const result = db.collection("contracts").insertOne(req.body);
+        res.status(201).json(result.insertedId);
+    } catch (error) {
+        res.status(500).end();
+    }
+});
 
 // Update contract status
+ContractsRouter.put("/contracts/:contractId", async (req, res) => {
+    const db = req.app("db");
+    
+    try {
+        const collection = db.collection("contracts");
+        const { id } = req.params;
+        const { status } = req.body;
+
+        await collection.updateOne({ _id: ObjectId(id)}, {$set: {status}});
+        res.status(201);
+
+    } catch (error) {
+        res.status(500).end();
+    }
+
+});
 
 // Update Contract unit (only unit number not type)
+ContractsRouter.put("/contracts/:contractId", async (req, res) => {
+    const db = req.app("db");
+    
+    try {
+        const collection = db.collection("contracts");
+        const { id } = req.params;
+        const { status } = req.body;
+
+        await collection.updateOne({ _id: ObjectId(id)}, {$set: {unitNumber}});
+        res.status(201);
+
+    } catch (error) {
+        res.status(500).end();
+    }
+    
+});
 
 // Update Contract time (ie reset start time or set closed time)
+ContractsRouter.put("/contracts/:contractId", async (req, res) => {
+    const db = req.app("db");
+    
+    try {
+        const collection = db.collection("contracts");
+        const { id } = req.params;
+        const { status } = req.body;
+
+        await collection.updateOne({ _id: ObjectId(id)}, {$set: {closeTime}});
+        res.status(201);
+
+    } catch (error) {
+        res.status(500).end();
+    }
+    
+});
 
 // Delete contract (should not be used beyond testing refer to unit status)
+ContractsRouter.delete("/contracts/:contractId", async (req, res) => {
+    const db = req.app("db");
+
+    try {
+        const collection = db.collection("contracts");
+        const { id } = req.params;
+
+        await collection.deleteOne({ _id: ObjectId(id) });
+        res.status(201);
+
+    } catch (error) {
+        res.status(500).end();
+    }
+});
+
+export default ContractsRouter
