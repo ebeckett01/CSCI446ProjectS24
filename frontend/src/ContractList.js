@@ -1,4 +1,5 @@
 import { useLoaderData, Link } from "react-router-dom";
+import "./ContractList.css";
 // Should display a list of all contracts
 // Should have Checkboxes to change the status of contracts to view
     // Boxes should change what type of contracts shown in list
@@ -14,12 +15,22 @@ export default function Contracts() {
 
 	return (
 		<>
-			{list.map((item) => (
-				<article key={item._id}>
-					<h2>{item.title}</h2>
-					<Link to={`/contracts/${item._id}`}><h3>{item._id}</h3></Link>
-				</article>
-			))}
+			<table>
+				<tr>
+					<th> Contract Number</th>
+					<th> Customer Name</th>
+					<th> Customer Phone #</th>
+					<th> Unit Rented</th>
+				</tr>
+				{list.map(contract=>(
+					<tr key={contract._id}>
+						<td><Link to={`/contracts/${contract.contractId}`}>{contract.contractId}</Link></td>
+						<td>{contract.fName}{contract.lName}</td>
+						<td>{contract.phone}</td>
+						<td>{contract.unitCategory}</td>
+					</tr>
+				))}
+			</table>
 		</>
 	);
 }

@@ -42,9 +42,14 @@ ContractsRouter.post("/new", async (req, res) => {
         res.status(500).end();
     }
 });
-
+// Get single contract
+ContractsRouter.get("/:contractId", async (req, res) =>{
+    const db = req.app.get("db");
+	const contract = await db.collection("contracts").findOne({ contractId: parseInt(req.params.contractId) });
+	return res.json(contract);
+});
 // Update contract status
-ContractsRouter.put("/contracts/:contractId", async (req, res) => {
+ContractsRouter.put("/:contractId/status", async (req, res) => {
     const db = req.app.get("db");
     
     try {
@@ -62,25 +67,29 @@ ContractsRouter.put("/contracts/:contractId", async (req, res) => {
 });
 
 // Update Contract unit (only unit number not type)
-ContractsRouter.put("/contracts/:contractId", async (req, res) => {
+ContractsRouter.put("/:contractId/unit", async (req, res) => {
     const db = req.app.get("db");
     
     try {
         const collection = await db.collection("contracts");
-        const { id } = req.params;
-        const { status } = req.body;
+        //console.log(req.params.contractId);
+        //console.log(req.body.newNumber);
 
-        await collection.updateOne({ _id: ObjectId(id)}, {$set: {unitNumber}});
+        await collection.updateOne(
+            { _id: new ObjectId(req.params.contractId)}, 
+            { $set: {unitNumber: req.body.newNumber}}
+        );
         res.status(201);
 
     } catch (error) {
+        console.log(error);
         res.status(500).end();
     }
     
 });
 
 // Update Contract time (ie reset start time or set closed time)
-ContractsRouter.put("/contracts/:contractId", async (req, res) => {
+ContractsRouter.put("/:contractId", async (req, res) => {
     const db = req.app.get("db");
     
     try {
@@ -98,7 +107,7 @@ ContractsRouter.put("/contracts/:contractId", async (req, res) => {
 });
 
 // Delete contract (should not be used beyond testing refer to unit status)
-ContractsRouter.delete("/contracts/:contractId", async (req, res) => {
+ContractsRouter.delete("/:contractId", async (req, res) => {
     const db = req.app.get("db");
 
     try {

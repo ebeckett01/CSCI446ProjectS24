@@ -6,6 +6,7 @@ import App from './App';
 import Layout from './Layout';
 import ContractList, { loadContracts } from "./ContractList";
 import CreateContract, { loadContractId } from "./CreateContract";
+import Contract, {loadContract} from "./Contract";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -20,7 +21,12 @@ const router = createBrowserRouter([
 				path: "/new",
 				element: <CreateContract/>,
         loader: loadContractId,
-			}
+			},
+      {
+        path: "/contracts/:contractId",
+        element: <Contract/>,
+        loader: loadContract,
+      }
 		]
 	}
 ]);
