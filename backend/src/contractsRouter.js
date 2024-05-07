@@ -1,6 +1,6 @@
 import {Router} from "express";
 import {ObjectId} from "mongodb";
-import unitsRouter from "./unitsRouter";
+import unitsRouter from "./unitsRouter.js";
 /*  Contract Object Description
 *   Unique Serial ID for database
 *   Contract Number 6 digits    ie 000001 is first contract
@@ -18,12 +18,25 @@ import unitsRouter from "./unitsRouter";
 
 const ContractsRouter = Router()
 
+// get active contracts
+ContractsRouter.get("/", async(req, res) =>{
+    const db = req.app.get("db");
+    const contracts = await db.collection("contracts").find().toArray();
+    return res.json(contracts);
+});
+// Get new contract number
+ContractsRouter.get("/number", async(req,res)=>{
+    const db = req.app.get("db");
+    const contracts = await db.collection("contracts").count();
+    return res.json(contracts);
+});
 // Create a contract
-ContractsRouter.post("/contracts", async (req, res) => {
-    const db = req.app("db");
+ContractsRouter.post("/new", async (req, res) => {
+    console.log(req.body);
+    const db = req.app.get("db");
 
     try {
-        const result = db.collection("contracts").insertOne(req.body);
+        const result = await db.collection("contracts").insertOne(req.body);
         res.status(201).json(result.insertedId);
     } catch (error) {
         res.status(500).end();
@@ -32,10 +45,10 @@ ContractsRouter.post("/contracts", async (req, res) => {
 
 // Update contract status
 ContractsRouter.put("/contracts/:contractId", async (req, res) => {
-    const db = req.app("db");
+    const db = req.app.get("db");
     
     try {
-        const collection = db.collection("contracts");
+        const collection = await db.collection("contracts");
         const { id } = req.params;
         const { status } = req.body;
 
@@ -50,10 +63,10 @@ ContractsRouter.put("/contracts/:contractId", async (req, res) => {
 
 // Update Contract unit (only unit number not type)
 ContractsRouter.put("/contracts/:contractId", async (req, res) => {
-    const db = req.app("db");
+    const db = req.app.get("db");
     
     try {
-        const collection = db.collection("contracts");
+        const collection = await db.collection("contracts");
         const { id } = req.params;
         const { status } = req.body;
 
@@ -68,10 +81,10 @@ ContractsRouter.put("/contracts/:contractId", async (req, res) => {
 
 // Update Contract time (ie reset start time or set closed time)
 ContractsRouter.put("/contracts/:contractId", async (req, res) => {
-    const db = req.app("db");
+    const db = req.app.get("db");
     
     try {
-        const collection = db.collection("contracts");
+        const collection = await db.collection("contracts");
         const { id } = req.params;
         const { status } = req.body;
 
@@ -86,10 +99,10 @@ ContractsRouter.put("/contracts/:contractId", async (req, res) => {
 
 // Delete contract (should not be used beyond testing refer to unit status)
 ContractsRouter.delete("/contracts/:contractId", async (req, res) => {
-    const db = req.app("db");
+    const db = req.app.get("db");
 
     try {
-        const collection = db.collection("contracts");
+        const collection = await db.collection("contracts");
         const { id } = req.params;
 
         await collection.deleteOne({ _id: ObjectId(id) });

@@ -18,7 +18,7 @@ app.use(express.json());
 
 // Setup of routers
 app.use("/unit", unitsRouter);
-app.use("/contract", contractsRouter);
+app.use("/contracts", contractsRouter);
 
 // Database confirmation
 const database = await connect();
