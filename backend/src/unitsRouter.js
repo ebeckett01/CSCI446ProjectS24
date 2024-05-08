@@ -9,7 +9,7 @@ UnitsRouter.mergeParams = true;
 *       Full displayed number would be 107-00301 = 301st Carpet Cleaner
 *   Unit Price  How much it costs to rent for a 24hr period
 *   Unit Status
-        Avaliable   Ready To Rent
+        Available   Ready To Rent
         On-Repair   Under maintenance/broken Not ready to rent
         Out         Out on a contract 
         Lost        Lost and no longer part of active inventory unable to re-add
@@ -47,35 +47,18 @@ UnitsRouter.get("/:unitCategory/:unitNumber", async(req, res) =>{
     const unit = await db.collection("units").findOne({ category: parseInt(req.params.unitCategory), number: parseInt(req.params.unitNumber) });
 	return res.json(unit);
 });
-// Update a unit status
-UnitsRouter.put("/:unitId/status", async (req, res) => {
+// Update a unit status and price
+UnitsRouter.put("/:unitCategory/:unitNumber/update", async (req, res) => {
         const db = req.app.get("db");
     
         try {
             const collection = db.collection("units");
-            const { unitId } = req.params;
-            const { status } = req.body;
     
-            await collection.updateOne({ _id: ObjectId(unitId) }, { $set: { status } });
-            res.status(201);
-        } catch (error) {
-            res.status(500).end();
-        }
-    });
+            await collection.updateOne({ category: parseInt(req.params.unitCategory), $and: [{number: parseInt(req.params.unitNumber)}] },
+                { $set: { status: req.body.status, price: parseInt(req.body.price) } });
 
-// Update a unit price
-UnitsRouter.put("/:unitId/price", async (req, res) => {
-        const db = req.app.get("db");
-    
-        try {
-            const collection = db.collection("units");
-            const { unitId } = req.params;
-            const { price } = req.body;
-    
-            await collection.updateOne({ _id: ObjectId(unitId) }, { $set: { price } });
-            res.status(201);
+            res.status(201).end();
         } catch (error) {
-            console.error("Error updating unit price:", error);
             res.status(500).end();
         }
     });

@@ -67,7 +67,7 @@ export default function CreateForm() {
 			body: JSON.stringify(formData),
 		});
 		if (result.status !== 201) {
-			setMessage({ msg: "Failed to create new whatever...", newId: null });
+			setMessage({ msg: "Failed to create new contract...", newId: null });
 			return;
 		}
 
@@ -83,7 +83,7 @@ export default function CreateForm() {
 			{message.msg ?
 				<>
 					<label>{message.msg}</label>
-					<Link to={`/contracts/${message.newId}`}>Newly created whatever</Link>
+					<Link to={`/contracts/${message.newId}`}>Newly created contract</Link>
 				</>
 				: null
 			}

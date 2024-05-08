@@ -25,7 +25,7 @@ export default function CreateForm() {
         serial: "",
         description: "",
         price: 0,
-        status: 'Avaliable',
+        status: 'Available',
     };
 
     const initialResultMessage = {
