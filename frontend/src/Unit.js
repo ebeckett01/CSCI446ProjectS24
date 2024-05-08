@@ -106,7 +106,7 @@ export default function Unit() {
 						<option value="Out">Out</option>
 					</select>
 					<br/><br/>
-					<button type="submit">Submit</button>
+					<button type="submit">Update</button>
 				</form>
 
 				{message.msg ?
@@ -117,15 +117,6 @@ export default function Unit() {
 				: null
 				}
 			</article>
-			<select name="unitStatus" onChange={handleStatus}>
-				<option value="Avaliable">Avaliable</option>
-				<option value="Out on Repair">Out on Repair</option>
-				<option value="Lost">Lost</option>
-			</select>
-			<button type="submit" onClick={submitStatus}>Update Status</button>
-			<br/>
-			<input type="number" value={price} onChange={handlePrice}></input>
-			<button type="submit" onClick={submitPrice}>Update Price</button>
 		</>
 	)
 }
