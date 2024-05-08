@@ -14,6 +14,19 @@ unitsRouter.mergeParams = true;
         Out         Out on a contract 
         Lost        Lost and no longer part of active inventory unable to re-add
 */
+
+// List units
+unitsRouter.get("/", async(req, res) =>{
+    const db = req.app.get("db");
+    const units = await db.collection("units").find().toArray();
+    return res.json(units);
+});
+// Finds unit by id
+unitsRouter.get("/:unitId", async(req, res) =>{
+    const db = req.app.get("db");
+    const unit = await db.collection("units").findOne({ unitId: parseInt(req.params.unitId) });
+	return res.json(unit);
+});
 // Create a unit
 unitsRouter.post("/units", async (req, res) => {
         const db = req.app.get("db");

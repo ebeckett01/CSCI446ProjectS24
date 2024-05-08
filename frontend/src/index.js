@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import './index.css';
-import App from './App';
 import Layout from './Layout';
 import ContractList, { loadContracts } from "./ContractList";
 import CreateContract, { loadContractId } from "./CreateContract";
 import Contract, {loadContract} from "./Contract";
+import UnitList, { loadUnits } from "./UnitList";
+import Unit, { loadUnit } from "./Unit";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -15,18 +16,28 @@ const router = createBrowserRouter([
 			{
 				path: "/",
 				element: <ContractList/>,
-        loader: loadContracts,
+        		loader: loadContracts,
 			},
 			{
 				path: "/new",
 				element: <CreateContract/>,
-        loader: loadContractId,
+        		loader: loadContractId,
 			},
-      {
-        path: "/contracts/:contractId",
-        element: <Contract/>,
-        loader: loadContract,
-      }
+      		{
+				path: "/contracts/:contractId",
+				element: <Contract/>,
+				loader: loadContract,
+      		},
+			{
+				path: "/units",
+				element: <UnitList/>,
+				loader: loadUnits,
+			},
+			{
+				path: "/units/:unitId",
+				element: <Unit/>,
+				loader: loadUnit,
+			}
 		]
 	}
 ]);

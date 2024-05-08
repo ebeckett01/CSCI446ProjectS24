@@ -17,7 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 // Setup of routers
-app.use("/unit", unitsRouter);
+app.use("/units", unitsRouter);
 app.use("/contracts", contractsRouter);
 
 // Database confirmation

@@ -1,4 +1,4 @@
-import { useLoaderData} from "react-router-dom";
+import { useLoaderData } from "react-router-dom";
 import { BASE_URL } from "./utils";
 // Should display detailed information on contract
 // Customer Information
@@ -42,7 +42,7 @@ export default function Project() {
 	return (
 		<>
 			<article>
-				<h1>Contract Number:{contract.contractId}</h1>
+				<h1>Contract Number: {contract.contractId}</h1>
                 <h3>Customer Name: {contract.fName} {contract.lName}</h3>
                 <h3>Unit Category: {contract.unitCategory}</h3>
                 <h3>Unit Number: {contract.unitNumber}</h3>

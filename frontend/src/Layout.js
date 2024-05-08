@@ -17,14 +17,14 @@ function Layout() {
                 </nav>
             </div>
         <div id="slogan">
-            <h1>Header 1</h1>
-            <h3>Sub Header 2</h3>
+            <h1>Rent-a-Unit</h1>
+            <h3>Rent our Units!</h3>
         </div>
       </header>
       <br></br>
       <Outlet />
       <footer>
-        <p>Some footer here</p>
+        <p>©2024 Renting out units since a few days ago.</p>
       </footer>
     </>
   );
