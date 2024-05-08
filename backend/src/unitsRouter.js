@@ -62,7 +62,7 @@ UnitsRouter.put("/:unitId/status", async (req, res) => {
             const { unitId } = req.params;
             const { status } = req.body;
     
-            await collection.updateOne({ _id: ObjectId(unitId) }, { $set: { status } });
+            await collection.updateOne({ _id: new ObjectId(unitId) }, { $set: { status } });
             res.status(201);
         } catch (error) {
             res.status(500).end();
@@ -78,7 +78,7 @@ UnitsRouter.put("/:unitId/price", async (req, res) => {
             const { unitId } = req.params;
             const { price } = req.body;
     
-            await collection.updateOne({ _id: ObjectId(unitId) }, { $set: { price } });
+            await collection.updateOne({ _id: new ObjectId(unitId) }, { $set: { price } });
             res.status(201);
         } catch (error) {
             console.error("Error updating unit price:", error);
@@ -100,7 +100,7 @@ UnitsRouter.delete("/:unitId", async (req, res) => {
             const collection = db.collection("units");
             const { unitId } = req.params;
     
-            await collection.deleteOne({ _id: ObjectId(unitId) });
+            await collection.deleteOne({ _id: new ObjectId(unitId) });
             res.status(201);
         } catch (error) {
             res.status(500).end();
