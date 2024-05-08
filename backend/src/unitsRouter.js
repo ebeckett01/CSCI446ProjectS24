@@ -40,12 +40,18 @@ UnitsRouter.get("/number/:categoryNumber", async(req,res)=>{
     const unit = await db.collection("units").find({category: parseInt(req.params.categoryNumber)}).count();
     return res.json(unit);
 });
-// Finds unit by id
-UnitsRouter.get("/:unitCategory/:unitNumber", async(req, res) =>{
+
+// Get unique unit category from the list of units
+UnitsRouter.get("/unique", async(req,res)=>{
     const db = req.app.get("db");
-    console.log(req.params);
-    const unit = await db.collection("units").findOne({ category: parseInt(req.params.unitCategory), number: parseInt(req.params.unitNumber) });
-	return res.json(unit);
+    const categories = await db.collection("units").distinct("category");
+    return res.json(categories); 
+});
+// Get list of units in that category
+UnitsRouter.get("/:unitCategory/list", async(req,res)=>{
+    const db = req.app.get("db");
+    const units = await db.collection("units").find({category:parseInt(req.params.unitCategory)}).toArray();
+    return res.json(units); 
 });
 // Update a unit status
 UnitsRouter.put("/:unitId/status", async (req, res) => {
@@ -79,7 +85,13 @@ UnitsRouter.put("/:unitId/price", async (req, res) => {
             res.status(500).end();
         }
     });
-
+// Finds unit by id
+UnitsRouter.get("/:unitCategory/:unitNumber", async(req, res) =>{
+    const db = req.app.get("db");
+    console.log(req.params);
+    const unit = await db.collection("units").findOne({ category: parseInt(req.params.unitCategory), number: parseInt(req.params.unitNumber) });
+	return res.json(unit);
+});
 // Delete a unit (should not be used beyond testing refer to unit status)
 UnitsRouter.delete("/:unitId", async (req, res) => {
         const db = req.app.get("db");
@@ -93,6 +105,6 @@ UnitsRouter.delete("/:unitId", async (req, res) => {
         } catch (error) {
             res.status(500).end();
         }
-    });
+});
     
 export default UnitsRouter;

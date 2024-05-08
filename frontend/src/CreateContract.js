@@ -14,32 +14,40 @@ import { useLoaderData, Link } from "react-router-dom";
 // Should populate Unit Number based on avaliable units from database
 // On submit send form data to backend to create contract and link to detailed view of contract
 async function loadContractId() {
-    const response = await fetch(`http://localhost:3001/contracts/number`);
-    return await response.json();
+    const numberReq = await fetch(`http://localhost:3001/contracts/number`);
+	const numberRes = await numberReq.json();
+	const unitCategoryReq = await fetch(`http://localhost:3001/units/unique`);
+	const unitCategoryRes = await unitCategoryReq.json();
+	const unitListReq = await fetch(`http://localhost:3001/units`);
+	const unitListRes = await unitListReq.json();
+    return {number: numberRes, category: unitCategoryRes, units:unitListRes};
 }
 export default function CreateForm() {
-    const number = useLoaderData();
+    const data = useLoaderData();
 	const initialFormData = {
-        contractId: number,
+        contractId: data.number,
 		fName: '',
         lName: '',
         phone: '',
-        unitCategory: "0",
-        unitNumber: "0",
+        unitCategory: "-1",
+        unitNumber: "-1",
         startTime: new Date(),
         endTime: new Date(),
         status: 'Open',
 	};
-
+	const initialUnitList = {
+		list: data.units,
+	};
 	const initialResultMessage = {
 		msg: '',
 		newId: null,
 	};
 	// INFO: Rather than use separate hooks, let's jam the state together
 	const [formData, setFormData] = useState(initialFormData);
+	const [unitList, setUnitList] = useState(initialUnitList)
 	const [message, setMessage] = useState(initialResultMessage);
-
-	const handleChange = (event) => {
+	//console.log(unitList.list);
+	const handleChange = async (event) => {
         //console.log(event.target);
 		const type = event.target.type;
         //console.log(type);
@@ -54,11 +62,32 @@ export default function CreateForm() {
                 [event.target.name]: event.target.value,
             });
         }
+		if(event.target.name == "unitCategory"){
+			console.log(`Looking up stuff for cat: ${event.target.value}`);
+			const listReq = await fetch(`http://localhost:3001/units/${event.target.value}/list`);
+			const listRes = await listReq.json();
+			setUnitList({
+				list: listRes,
+			});
+		}
 	};
 
 	const handleSubmit = async (event) => {
 		event.preventDefault();
         console.log(formData);
+		if(formData.fName === "" || formData.lName === ""){
+			console.error("Invalid Name");
+			return;
+		}else if(formData.phone ===""){
+			console.error("Invalid Phone Number");
+			return;
+		}else if(formData.unitCategory === "-1"){
+			console.error("Invalid Unit Category");
+			return;
+		}else if(formData.unitNumber === "-1"){
+			console.error("Invalid Unit Number");
+			return;
+		}
 		const result = await fetch(`${BASE_URL}/contracts/new`, {
 			method: "POST",
 			headers: {
@@ -99,18 +128,18 @@ export default function CreateForm() {
 				<br />
                 <label>Unit Category</label>
 				<select name="unitCategory" value={formData.unitCategory} onChange={handleChange}>
-                    <option value="1" >Temp 1</option>
-                    <option value="2" >Temp 2</option>
-                    <option value="3" >Temp 3</option>
-                    <option value="4" >Temp 4</option>
+                    <option value="-1"></option>
+					{data.category.map(unitCat=>(
+						<option value={unitCat}>{unitCat}</option>
+					))}
                 </select>
                 <br/>
                 <label>Unit Number</label>
 				<select name="unitNumber" onChange={handleChange}>
-                    <option value="1" >Temp 1</option>
-                    <option value="2" >Temp 2</option>
-                    <option value="3" >Temp 3</option>
-                    <option value="4" >Temp 4</option>
+                    <option value="-1" ></option>
+					{unitList.list.map(unit=>(
+						<option value={unit.number}>{unit.number}</option>
+					))}
                 </select>
                 <br/>
 				<button type="submit">Create</button>
