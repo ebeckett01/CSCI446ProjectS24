@@ -14,19 +14,22 @@ export default function Units() {
 
     return (
         <>
+			<h1><Link to={`/units/new`}>Create New Unit</Link></h1>
             <table>
 				<tr>
 					<th>Unit ID</th>
 					<th>Unit Type</th>
-					<th>Unit #</th>
-					<th>Unit $</th>
-                    <th>Unit Stat</th>
+					<th>Unit Number</th>
+					<th>Unit Description</th>
+					<th>Unit Price</th>
+                    <th>Unit Status</th>
 				</tr>
 				{list.map(unit=>(
 					<tr key={unit._id}>
-						<td><Link to={`/units/${unit.unitId}`}>{unit.unitId}</Link></td>
+						<td><Link to={`/units/${unit.category}/${unit.number}`}>{unit.category}-{unit.number}</Link></td>
 						<td>{unit.category}</td>
 						<td>{unit.number}</td>
+						<td>{unit.description}</td>
 						<td>{unit.price}</td>
                         <td>{unit.status}</td>
 					</tr>

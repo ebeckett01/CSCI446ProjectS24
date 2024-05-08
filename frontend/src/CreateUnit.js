@@ -1,6 +1,6 @@
 import { useLoaderData, Link } from "react-router-dom";
 import { BASE_URL } from "./utils";
-import { useLoaderData, Link } from "react-router-dom";
+import { useState } from "react"
 
 // Should create a unit based on form data
 
@@ -11,7 +11,7 @@ import { useLoaderData, Link } from "react-router-dom";
 */
 
 // Unit should initialize as availiable and unit number made by number of units already in that category
-async function loadUnitId(req) {
+async function loadUnitData(req) {
     const response = await fetch(`http://localhost:3001/contracts/${req.params.contractId}`);
     return await response.json();
 }
@@ -20,10 +20,12 @@ export default function CreateForm() {
     const data = useLoaderData();
 
     const initialFormData = {
-        category: "0",
-        // unitSerial: data._id,
-        number: "0",
-        price: "0"
+        category: "",
+        number: "",
+        serial: "",
+        description: "",
+        price: 0,
+        status: 'Avaliable',
     };
 
     const initialResultMessage = {
@@ -36,21 +38,34 @@ export default function CreateForm() {
 
     const handleChange = (event) => {
         const type = event.target.type;
-        if(type == "text" || type == "number"){
+        if(type == "text" && (event.target.placeholder != "category")){
             setFormData({
                 ...formData,
                 [event.target.placeholder]: event.target.value,
+            });
+        }else if(type == "text"){
+            setFormData({
+                ...formData,
+                [event.target.placeholder]: parseInt(event.target.value),
             });
         }else if(type == "select-one"){
             setFormData({
                 ...formData,
                 [event.target.name]: event.target.value,
             });
+        }else if (type == "number"){
+            setFormData({
+                ...formData,
+                [event.target.placeholder]: parseInt(event.target.value),
+            });
         }
     }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const req = await fetch(`http://localhost:3001/units/number/${formData.category}`)
+        const res = await req.json();
+        formData.number = parseInt(res);
         console.log(formData);
 		const result = await fetch(`${BASE_URL}/units`, {
 			method: "POST",
@@ -75,28 +90,21 @@ export default function CreateForm() {
         <>
             <form onSubmit={handleSubmit}>
                 <label>Unit Category</label>
-                <select name="unitCategory" value={formData.unitCategory} onChange={handleChange}>
-                    <option value="1" >Temp 1</option>
-                    <option value="2" >Temp 2</option>
-                    <option value="3" >Temp 3</option>
-                    <option value="4" >Temp 4</option>
-                </select>
+                <input type="text" placeholder="category" value={formData.category} onChange={handleChange}/>
+                <br/>
                 <label>Unit Serial Number</label>
-
+                <input type="text" placeholder="serial" value={formData.serial} onChange={handleChange}/>
                 <br/>
-                <label>Unit Number</label>
-                <select name="unitNumber" onChange={handleChange}>
-                    <option value="1" >Temp 1</option>
-                    <option value="2" >Temp 2</option>
-                    <option value="3" >Temp 3</option>
-                    <option value="4" >Temp 4</option>
-                </select>
+                <label>Unit Desciption</label>
+                <input type="text" placeholder="description" value={formData.description} onChange={handleChange}/>
                 <br/>
-
                 <label>Unit Price</label>
-                <input type  = "number" placeholder="price" value = {formData.unitPrice}></input>
+                <input type="number" placeholder="price" value = {formData.price} onChange={handleChange}></input>
 
+                <br/>
+                <button type="submit">Create</button>
             </form>
         </>
     )
 }
+export {loadUnitData};

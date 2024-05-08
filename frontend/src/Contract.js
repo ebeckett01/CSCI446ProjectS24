@@ -17,7 +17,7 @@ async function loadContract(request) {
 }
 
 export default function Project() {
-	const contract = useLoaderData();
+	var contract = useLoaderData();
     var unitNumber = "-1";
     const handleChange = (event) =>{
         if(event.target.type == "select-one"){
@@ -35,8 +35,25 @@ export default function Project() {
 		});
         if(result.status !== 201){
             console.error("Failed query");
+        }else{
+            setTimeout(function(){Document.location.reload();},500);
         }
         // Update contract with new info
+    }
+    const handleClose = async(event) =>{
+        event.preventDefault();
+        const result = await fetch(`${BASE_URL}/contracts/${contract._id}/status`, {
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+			},
+			body: JSON.stringify({newStatus: "Closed"}),
+		});
+        if(result.status !== 201){
+            console.error("Failed query");
+        }
+        // Update contract with new info
+        window.location.reload();
     }
 	console.log(contract);
 	return (
@@ -46,6 +63,7 @@ export default function Project() {
                 <h3>Customer Name: {contract.fName} {contract.lName}</h3>
                 <h3>Unit Category: {contract.unitCategory}</h3>
                 <h3>Unit Number: {contract.unitNumber}</h3>
+                <h3>Contract Status: {contract.status}</h3>
 			</article>
             <label>Swap Unit on Contract</label>
             <select name="unitNumber" onChange={handleChange}>
@@ -55,6 +73,7 @@ export default function Project() {
                 <option value="4"> Temp 4</option>
             </select>
             <button type="Submit" onClick={handleSubmit}>Swap</button>
+            <button type="Submit" onClick={handleClose}>Close Contract</button>
 		</>
 	)
 }

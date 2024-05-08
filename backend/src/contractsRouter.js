@@ -28,6 +28,7 @@ ContractsRouter.get("/", async(req, res) =>{
 ContractsRouter.get("/number", async(req,res)=>{
     const db = req.app.get("db");
     const contracts = await db.collection("contracts").count();
+    console.log(contracts);
     return res.json(contracts);
 });
 // Create a contract
@@ -51,16 +52,16 @@ ContractsRouter.get("/:contractId", async (req, res) =>{
 // Update contract status
 ContractsRouter.put("/:contractId/status", async (req, res) => {
     const db = req.app.get("db");
-    
     try {
         const collection = await db.collection("contracts");
-        const { id } = req.params;
-        const { status } = req.body;
 
-        await collection.updateOne({ _id: ObjectId(id)}, {$set: {status}});
+        await collection.updateOne(
+            { _id: new ObjectId(req.params.contractId)}, 
+            {$set: {status: req.body.newStatus}});
         res.status(201);
 
     } catch (error) {
+        console.log(error);
         res.status(500).end();
     }
 

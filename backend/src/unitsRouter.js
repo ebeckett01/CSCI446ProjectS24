@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { ObjectId } from "mongodb";
-const unitsRouter = Router();
-unitsRouter.mergeParams = true;
+const UnitsRouter = Router();
+UnitsRouter.mergeParams = true;
 /*  Unit Object Descirption
 *   Unique Serial ID for database
 *   Category Number for unit type   ie 107 = Carpet Cleaner
@@ -16,19 +16,14 @@ unitsRouter.mergeParams = true;
 */
 
 // List units
-unitsRouter.get("/", async(req, res) =>{
+UnitsRouter.get("/", async(req, res) =>{
+    console.log("Lost request");
     const db = req.app.get("db");
     const units = await db.collection("units").find().toArray();
     return res.json(units);
 });
-// Finds unit by id
-unitsRouter.get("/:unitId", async(req, res) =>{
-    const db = req.app.get("db");
-    const unit = await db.collection("units").findOne({ unitId: parseInt(req.params.unitId) });
-	return res.json(unit);
-});
 // Create a unit
-unitsRouter.post("/units", async (req, res) => {
+UnitsRouter.post("/", async (req, res) => {
         const db = req.app.get("db");
     
         try {
@@ -39,9 +34,21 @@ unitsRouter.post("/units", async (req, res) => {
             res.status(500).json({ error: "Failed to create unit" });
         }
     });
-
+// Get number of units in category
+UnitsRouter.get("/number/:categoryNumber", async(req,res)=>{
+    const db = req.app.get("db");
+    const unit = await db.collection("units").find({category: parseInt(req.params.categoryNumber)}).count();
+    return res.json(unit);
+});
+// Finds unit by id
+UnitsRouter.get("/:unitCategory/:unitNumber", async(req, res) =>{
+    const db = req.app.get("db");
+    console.log(req.params);
+    const unit = await db.collection("units").findOne({ category: parseInt(req.params.unitCategory), number: parseInt(req.params.unitNumber) });
+	return res.json(unit);
+});
 // Update a unit status
-unitsRouter.put("/units/:unitId/status", async (req, res) => {
+UnitsRouter.put("/:unitId/status", async (req, res) => {
         const db = req.app.get("db");
     
         try {
@@ -57,7 +64,7 @@ unitsRouter.put("/units/:unitId/status", async (req, res) => {
     });
 
 // Update a unit price
-unitsRouter.put("/units/:unitId/price", async (req, res) => {
+UnitsRouter.put("/:unitId/price", async (req, res) => {
         const db = req.app.get("db");
     
         try {
@@ -74,7 +81,7 @@ unitsRouter.put("/units/:unitId/price", async (req, res) => {
     });
 
 // Delete a unit (should not be used beyond testing refer to unit status)
-unitsRouter.delete("/units/:unitId", async (req, res) => {
+UnitsRouter.delete("/:unitId", async (req, res) => {
         const db = req.app.get("db");
     
         try {
@@ -88,4 +95,4 @@ unitsRouter.delete("/units/:unitId", async (req, res) => {
         }
     });
     
-export default unitsRouter;
+export default UnitsRouter;

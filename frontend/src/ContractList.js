@@ -21,6 +21,7 @@ export default function Contracts() {
 					<th> Customer Name</th>
 					<th> Customer Phone #</th>
 					<th> Unit Rented</th>
+					<th> Contract Status</th>
 				</tr>
 				{list.map(contract=>(
 					<tr key={contract._id}>
@@ -28,6 +29,7 @@ export default function Contracts() {
 						<td>{contract.fName} {contract.lName}</td>
 						<td>{contract.phone}</td>
 						<td>{contract.unitCategory}</td>
+						<td>{contract.status}</td>
 					</tr>
 				))}
 			</table>

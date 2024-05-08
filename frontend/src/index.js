@@ -8,6 +8,7 @@ import CreateContract, { loadContractId } from "./CreateContract";
 import Contract, {loadContract} from "./Contract";
 import UnitList, { loadUnits } from "./UnitList";
 import Unit, { loadUnit } from "./Unit";
+import CreateUnit, {loadUnitData} from "./CreateUnit";
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -34,10 +35,15 @@ const router = createBrowserRouter([
 				loader: loadUnits,
 			},
 			{
-				path: "/units/:unitId",
+				path: "/units/:category/:number",
 				element: <Unit/>,
 				loader: loadUnit,
-			}
+			},
+      {
+        path:  "/units/new",
+        element: <CreateUnit/>,
+        loader: loadUnitData,
+      }
 		]
 	}
 ]);
