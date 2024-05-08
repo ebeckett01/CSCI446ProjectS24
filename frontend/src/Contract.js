@@ -12,20 +12,29 @@ import { BASE_URL } from "./utils";
 async function loadContract(request) {
 	console.log(request);
 	const contractId = request.params.contractId;
-	const response = await fetch(`http://localhost:3001/contracts/${contractId}`);
-	return await response.json();
+	const contractReq = await fetch(`http://localhost:3001/contracts/${contractId}`);
+    const contractRes = await contractReq.json();
+    const unitsReq = await  fetch(`http://localhost:3001/units/${contractRes.unitCategory}/list`);
+	const unitsRes = await unitsReq.json();
+    //console.log(unitsRes);
+    return {contract: contractRes, units:unitsRes};
 }
 
 export default function Project() {
-	var contract = useLoaderData();
+    const data = useLoaderData();
+	var contract = data.contract;
     var unitNumber = "-1";
     const handleChange = (event) =>{
-        if(event.target.type == "select-one"){
+        if(event.target.type === "select-one"){
             unitNumber = event.target.value; 
         }
     }
     const handleSubmit = async(event) =>{
         event.preventDefault();
+        if(unitNumber === -1){
+            console.error("Invalid Selection");
+            return;
+        }
         const result = await fetch(`${BASE_URL}/contracts/${contract._id}/unit`, {
 			method: "PUT",
 			headers: {
@@ -67,10 +76,10 @@ export default function Project() {
 			</article>
             <label>Swap Unit on Contract</label>
             <select name="unitNumber" onChange={handleChange}>
-                <option value="1"> Temp 1</option>
-                <option value="2"> Temp 2</option>
-                <option value="3"> Temp 3</option>
-                <option value="4"> Temp 4</option>
+                <option value="-1"></option>
+                {data.units.map(unit=>(
+                    <option value={unit.number}>{unit.number}</option>
+                ))}
             </select>
             <button type="Submit" onClick={handleSubmit}>Swap</button>
             <button type="Submit" onClick={handleClose}>Close Contract</button>

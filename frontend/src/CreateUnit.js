@@ -63,6 +63,16 @@ export default function CreateForm() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if(formData.category===""){
+            console.error("Invalid Unit Category");
+            return;
+        }else if(formData.serial ===""){
+            console.error("Invalid Serial Number");
+            return;
+        }else if(formData.price === 0){
+            console.error("Invalid Price");
+            return;
+        }
         const req = await fetch(`http://localhost:3001/units/number/${formData.category}`)
         const res = await req.json();
         formData.number = parseInt(res);

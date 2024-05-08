@@ -31,6 +31,7 @@ ContractsRouter.get("/number", async(req,res)=>{
     console.log(contracts);
     return res.json(contracts);
 });
+
 // Create a contract
 ContractsRouter.post("/new", async (req, res) => {
     console.log(req.body);
@@ -38,7 +39,7 @@ ContractsRouter.post("/new", async (req, res) => {
 
     try {
         const result = await db.collection("contracts").insertOne(req.body);
-        res.status(201).json(result.insertedId);
+        res.status(201).json(req.body.contractId);
     } catch (error) {
         res.status(500).end();
     }

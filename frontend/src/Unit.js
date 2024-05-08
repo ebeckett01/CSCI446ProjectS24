@@ -12,7 +12,27 @@ async function loadUnit(request) {
     const response = await fetch(`http://localhost:3001/units/${unitCategory}/${unitNumber}`);
     return await response.json();
 }
-
+/*	TODO List
+*	Dropdown for unit status
+*	Input for unit price update
+*/
+var price = 0;
+const handlePrice = (event)=>{
+	console.log("price event");
+	// Update price variable
+}
+const submitPrice = async(event)=>{
+	console.log("Price update");
+	// Update price on backend
+}
+const handleStatus = (event) =>{
+	console.log("status event");
+	// change status variable
+}
+const submitStatus = async(event) =>{
+	console.log("Status update")
+	// Update status on backend
+}
 export default function Unit() {
 	const unit = useLoaderData();
 
@@ -97,6 +117,15 @@ export default function Unit() {
 				: null
 				}
 			</article>
+			<select name="unitStatus" onChange={handleStatus}>
+				<option value="Avaliable">Avaliable</option>
+				<option value="Out on Repair">Out on Repair</option>
+				<option value="Lost">Lost</option>
+			</select>
+			<button type="submit" onClick={submitStatus}>Update Status</button>
+			<br/>
+			<input type="number" value={price} onChange={handlePrice}></input>
+			<button type="submit" onClick={submitPrice}>Update Price</button>
 		</>
 	)
 }
