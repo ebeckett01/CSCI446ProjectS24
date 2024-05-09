@@ -44,6 +44,16 @@ ContractsRouter.post("/new", async (req, res) => {
         res.status(500).end();
     }
 });
+ContractsRouter.get("/search/:key", async(req,res)=>{
+    console.log(req.params);
+    const db = req.app.get("db");
+    const contracts = await db.collection("contracts").find({$or:[
+        {contractId: parseInt(req.params.key)},
+        {fName:{$regex: `${req.params.key}`}},
+        {lName:{$regex: `${req.params.key}`}},
+    ]}).toArray();
+    return res.json(contracts);
+});
 // Get single contract
 ContractsRouter.get("/:contractId", async (req, res) =>{
     const db = req.app.get("db");

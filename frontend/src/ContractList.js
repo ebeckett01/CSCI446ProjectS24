@@ -1,5 +1,6 @@
 import { useLoaderData, Link } from "react-router-dom";
 import "./ContractList.css";
+import { useState } from "react"
 // Should display a list of all contracts
 // Should have Checkboxes to change the status of contracts to view
 // Boxes should change what type of contracts shown in list
@@ -10,11 +11,20 @@ async function loadContracts() {
 }
 
 export default function Contracts() {
-	const list = useLoaderData();
-	console.log(list);
-
+	//console.log(list);
+	const [search, setSearch] = useState('');
+	const [list, setList] = useState(useLoaderData());
+	const handleChange = async (event) =>{
+		setSearch(event.target.value);
+		var req = await fetch(`http://localhost:3001/contracts`);
+		if(event.target.value !== ""){
+			req = await fetch(`http://localhost:3001/contracts/search/${event.target.value}`);
+		}
+		setList(await req.json());
+	}
 	return (
 		<>
+		<input type="text" name="searchBar" placeholder="Search Contracts" value={search} onChange={handleChange}></input>
 			<table>
 				<tr>
 					<th> Contract Number</th>

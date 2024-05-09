@@ -15,7 +15,7 @@ Final Project for CSCI 446 Web Applications
 ### Units
 #### Units have the following information stored
 - Unit Category: Type of unit ie. 107 = Carpet Cleaner
-- Unit Number: Unique identifier within category ie. 00001 for first unit
+- Unit Number: Unique identifier within category ie. 1 for first unit
 - Unit Status:
     - Avaliable: Ready to rent
     - On-Repair: Needs maintenance can't rent
@@ -27,7 +27,7 @@ Final Project for CSCI 446 Web Applications
 - Update unit price
 ### Contracts
 #### Contracts have the following information stored
-- Contract Number: Unqie 6 digit number for contract ie 000001 is first contract
+- Contract Number: unique number for contract ie 1 is first contract
 - Contract Status:
     - Active: Unit still on rent
     - Closed: Unit was returned
