@@ -53,11 +53,11 @@ Final Project for CSCI 446 Web Applications
 6. Check out button (start time)
 ### Check-In Process
 1. Go to contracts tab
-2. Select the correct contract (search name / phone number / contract number)
+2. Select the correct contract (search name  / contract number)
 3. Check in button (stop time)
 ### Swapping Units
 1. Go to contracts tab
-2. Select the correct contract (search name / phone number / contract number)
+2. Select the correct contract (search name / contract number)
 3. Dropdown for other units in category
 4. Click swap units button
 ### Getting New Units
